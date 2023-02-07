@@ -1,14 +1,18 @@
-import { useState } from 'react'
+// import { useState } from 'react'
+import React, { Component } from 'react'
 
 import IngredientList from './IngreditentList'
 import BurgerStacker from './BurgerStacker'
 
 import './BurgerBuilder.css'
 
-const BurgerBuilder = () => {
-    const [ingredientStack, setIngredientStack] = useState([])
+class BurgerBuilder extends Component {
+    state = {
+        ingredientStack: [],
+    }
+    // const [ingredientStack, setIngredientStack] = useState([])
 
-    const ingredients = [
+    ingredients = [
         { name: 'Kaiser Bun', color: 'saddlebrown' },
         { name: 'Sesame Bun', color: 'sandybrown' },
         { name: 'Gluten Free Bun', color: 'peru' },
@@ -24,39 +28,49 @@ const BurgerBuilder = () => {
     ]
 
     // click handler
-    const handleClick = e => {
+    handleClick = e => {
         // console.log('e.target: ', e)
         e.preventDefault()
-        setIngredientStack([JSON.parse(e.target.value), ...ingredientStack])
+        // setIngredientStack([, ...ingredientStack])
+        this.setState(prevState => {
+            const newIng = [JSON.parse(e.target.value), ...this.ingredientStack]
+            return {
+                ingredientStack: { ...this.state.ingredientStack, ...newIng },
+            }
+        })
     }
 
-    const clearBurger = () => {
-        setIngredientStack([])
+    clearBurger = () => {
+        // setIngredientStack([])
+        this.setState({ ingredientStack: [] })
     }
 
-    const handleRemove = e => {
+    handleRemove = e => {
         // console.log('e.target: ', e)
         e.preventDefault()
-        const removeFirst = ingredientStack.slice(1)
-        console.log(removeFirst)
-        setIngredientStack([...removeFirst])
+        const removeFirst = this.state.ingredientStack.slice(1)
+        // console.log(removeFirst)
+        // setIngredientStack([...removeFirst])
+        this.setState({ ingredientStack: [...removeFirst] })
     }
 
     // console.log(ingredientStack)
-    return (
-        <div className='burger-builder'>
-            <ul className='ingredient-list-container'>
-                <IngredientList
-                    ingredients={ingredients}
-                    handleClick={handleClick}
+    render() {
+        return (
+            <div className='burger-builder'>
+                <ul className='ingredient-list-container'>
+                    <IngredientList
+                        ingredients={this.ingredients}
+                        handleClick={this.handleClick}
+                    />
+                </ul>
+                <BurgerStacker
+                    ingredientStack={this.state.ingredientStack}
+                    handleRemove={this.handleRemove}
+                    clear={this.clearBurger}
                 />
-            </ul>
-            <BurgerStacker
-                ingredientStack={ingredientStack}
-                handleRemove={handleRemove}
-                clear={clearBurger}
-            />
-        </div>
-    )
+            </div>
+        )
+    }
 }
 export default BurgerBuilder
