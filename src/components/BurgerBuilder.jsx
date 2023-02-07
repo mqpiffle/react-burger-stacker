@@ -30,7 +30,7 @@ const BurgerBuilder = () => {
         setIngredientStack([JSON.parse(e.target.value), ...ingredientStack])
     }
 
-    const clearBurger = e => {
+    const clearBurger = () => {
         setIngredientStack([])
     }
 

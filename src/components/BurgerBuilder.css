@@ -2,4 +2,5 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
+    margin-block-start: 2rem;
 }
